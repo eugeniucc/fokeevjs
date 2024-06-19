@@ -80,6 +80,38 @@
 
 // calc(1, 2, 3, 4, 5);
 
+// "use strict";
 
- 
+// const names = [
+//   "Дмитрий",
+//   "Иван",
+//   "Анастасия",
+//   "Виктор",
+//   "Игорь",
+//   "Дмитрий",
+//   "Иван",
+//   "Анастасия",
+// ];
+
+// const result = new Set(names);
+// console.log(...result);
+
+// const name = "Dmitrii";
+// const uniqLetter = new Set(name);
+// console.log(uniqLetter);
+// const resultLetter = Array.from(uniqLetter);
+// console.log(resultLetter);
+
+// const resultArr = Array.from(result);
+// console.log(resultArr);
+
+// "use strict";
+
+// const hotel = new Map();
+// hotel.set("categories", ["std", "eco", "suit", "lux"]);
+// hotel.set(true, "Мы открыты");
+// hotel.set(false, "Мы закрыты");
+// hotel.set([2, 3], "Это массив");
+// console.log(hotel);
+
 
