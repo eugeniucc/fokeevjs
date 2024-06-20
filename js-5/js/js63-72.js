@@ -114,4 +114,37 @@
 // hotel.set([2, 3], "Это массив");
 // console.log(hotel);
 
+"use strict";
 
+const hotel = new Map([
+  ["categories", ["std", "eco", "suit", "lux"]],
+  [true, "Мы открыты"],
+  [false, "Мы закрыты"],
+]);
+
+console.log(hotel);
+
+const obj = {
+  name: "John",
+  lastName: "Travolta",
+  age: 30,
+};
+
+for (const [key, value] of hotel) {
+  console.log(`Ключ ${key}, value ${value}`);
+}
+
+// const mapFromObj = new Map(Object.entries(obj));
+// console.log(mapFromObj);
+
+// const setFromMap = new Set(hotel);
+// console.log(setFromMap);
+
+// const arrFromMap = Array.from(hotel);
+// console.log(arrFromMap);
+
+// const arrFromObj = Object.entries(obj);
+// console.log(arrFromObj);
+
+// const objFromarr = Object.fromEntries(arrFromObj);
+// console.log(objFromarr);
