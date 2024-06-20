@@ -19,9 +19,9 @@
 
 // checkSeat(plane);
 
-"use strict";
+// "use strict";
 
-const airpline = "TAP Air Portugal";
+// const airpline = "TAP Air Portugal";
 
 // console.log(airpline.toLocaleLowerCase());
 // console.log(airpline.toLocaleUpperCase());
@@ -35,7 +35,38 @@ const airpline = "TAP Air Portugal";
 // const correctStr = str.replace("свет", "мир");
 // console.log(correctStr);
 
-const flight = "s7ADR320";
-console.log(flight.includes("7AD"));
-console.log(flight.startsWith("s7"));
-console.log(flight.endsWith("s"));
+// const flight = "s7ADR320";
+// console.log(flight.includes("7AD"));
+// console.log(flight.startsWith("s7"));
+// console.log(flight.endsWith("s"));
+
+// "use strict";
+
+// const newNames = "dmitrii maria ivan igor vika";
+// const arrFromStr = newNames.split(" ");
+// console.log(arrFromStr);
+// const strFromArr = arrFromStr.join(" ");
+// console.log(strFromArr);
+
+// function capitalName(strNames) {
+//   const arrNames = strNames.split(" ");
+
+//   const newUpperNames = [];
+
+//   for (const n of arrNames) {
+//     newUpperNames.push(n[0].toUpperCase() + n.slice([1]));
+//   }
+//   console.log(newUpperNames);
+// }
+
+// capitalName(newNames);
+
+// "use strict";
+
+// const cardNumber = "6543";
+
+// console.log(cardNumber.padEnd(16, "*"));
+
+// "use strict";
+// const hello = "hello world";
+// console.log(hello + " " + hello.repeat(2));
