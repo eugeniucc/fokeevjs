@@ -108,7 +108,19 @@ createLogin(accounts);
 
 function calcPrintBalance(arr) {
   const balance = arr.reduce((acc, value) => acc + value, 0);
-  labelBalance.textContent = balance;
+  labelBalance.textContent = `${balance} RUB`;
 }
 
-console.log(calcPrintBalance(account1));
+console.log(calcPrintBalance(account1.movements));
+
+const arr = [1, 2, 3, 4, 5, 6,1231];
+
+const max = arr.reduce((acc, value) => {
+  if (acc > value) {
+    return acc;
+  } else {
+    return value;
+  }
+}, arr[0]);
+
+console.log(max);
