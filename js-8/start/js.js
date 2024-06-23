@@ -52,75 +52,219 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-function displayMovements(movements) {
+// Вывод на страницу всех приходов и уходов
+function displayMovements(movements, sort = false) {
   containerMovements.innerHTML = "";
-  movements.forEach(function (value, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (value, i) {
     const type = value > 0 ? "deposit" : "withdrawal";
+    const typeMessage = value > 0 ? "внесение" : "снятие";
     const html = `
     <div class="movements__row">
           <div class="movements__type movements__type--${type}">
-            ${i + 1} снятие
+            ${i + 1} ${typeMessage}
           </div>
           <div class="movements__date">24/01/2037</div>
-          <div class="movements__value">${value}P</div>
+          <div class="movements__value">${value}₽</div>
         </div>
     `;
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 }
-displayMovements(account1.movements);
 
-// const rub = [100, 222, 340, 454];
-// let usd = [];
-
-// rub.forEach(function (val) {
-//   usd.push((val / 72).toFixed(2));
-// });
-
-// console.log(usd);
-
-// const usd2 = rub.map((element) => (element / 72).toFixed(2));
-
-function createLogin(accs) {
-  accs.forEach((element) => {
-    element.logIn = element.owner
+// Создание логина из ФИО в объекте
+function createLogIn(accs) {
+  accs.forEach(function (acc) {
+    acc.logIn = acc.owner
       .toLowerCase()
       .split(" ")
-      .map((val) => val[0])
+      .map(function (val) {
+        return val[0];
+      })
       .join("");
   });
 }
+createLogIn(accounts);
 
-createLogin(accounts);
+// Подсчет и вывод на страницу общего баланса
+function calcPrintBalance(acc) {
+  acc.balance = acc.movements.reduce(function (acc, val) {
+    return acc + val;
+  });
 
-// console.log(accounts);
-
-// const arr = [1, -12, 27, -26, -100, 9];
-
-// const filteredArr = arr.filter((element) => element > 0);
-// console.log(filteredArr);
-
-// const arr = [5, 5, 5, 5];
-
-// const result = arr.reduce((acc, value) => acc + value, 0);
-
-// console.log(result);
-
-function calcPrintBalance(arr) {
-  const balance = arr.reduce((acc, value) => acc + value, 0);
-  labelBalance.textContent = `${balance} RUB`;
+  labelBalance.textContent = `${acc.balance} RUB`;
 }
 
-console.log(calcPrintBalance(account1.movements));
+// Сумма и вывод на страницу прихода и ухода в footer
+function calcDisplaySum(movements) {
+  const incomes = movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}₽`;
 
-const arr = [1, 2, 3, 4, 5, 6,1231];
+  const out = movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)}₽`;
 
-const max = arr.reduce((acc, value) => {
-  if (acc > value) {
-    return acc;
-  } else {
-    return value;
+  labelSumInterest.textContent = `${incomes + out}₽`;
+}
+
+//Обновление интерфейса сайта
+function updateUi(acc) {
+  displayMovements(acc.movements);
+  calcPrintBalance(acc);
+  calcDisplaySum(acc.movements);
+}
+
+//Кнопка входа в аккаунт
+let currentAccount;
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  console.log("Login");
+  currentAccount = accounts.find(function (acc) {
+    return acc.logIn === inputLoginUsername.value;
+  });
+  console.log(currentAccount);
+  if (currentAccount && currentAccount.pin === Number(inputLoginPin.value)) {
+    containerApp.style.opacity = 100;
+
+    inputLoginPin.value = inputLoginUsername.value = "";
+
+    console.log("Pin ok");
+    updateUi(currentAccount);
   }
-}, arr[0]);
+});
 
-console.log(max);
+//Перевод денег на другой аккаунт
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
+  const reciveAcc = accounts.find(function (acc) {
+    return acc.logIn === inputTransferTo.value;
+  });
+  const amount = Number(inputTransferAmount.value);
+  console.log(amount, reciveAcc);
+  if (
+    reciveAcc &&
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    reciveAcc.logIn !== currentAccount.logIn
+  ) {
+    currentAccount.movements.push(-amount);
+    reciveAcc.movements.push(amount);
+    updateUi(currentAccount);
+    inputTransferTo.value = inputTransferAmount.value = "";
+  }
+});
+
+//Удаление аккаунта
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.logIn &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(function (acc) {
+      return acc.logIn === currentAccount.logIn;
+    });
+    console.log(index);
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+    console.log(accounts);
+  }
+  inputCloseUsername.value = inputClosePin.value = "";
+});
+
+//Внесение денег на счет
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0) {
+    currentAccount.movements.push(amount);
+    updateUi(currentAccount);
+  }
+  inputLoanAmount.value = "";
+});
+
+// Общий баланс длинно
+// const accMov = accounts.map(function (acc) {
+//   return acc.movements;
+// });
+// const allMov = accMov.flat();
+
+// const allBalance = allMov.reduce(function (acc, mov) {
+//   return acc + mov;
+// }, 0);
+// console.log(allBalance);
+
+// Общий баланс коротко
+const overalBalance = accounts
+  .map((acc) => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+
+//Сортировка по приходам и уходам
+let sorted = false;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
+//Изменение значка валюты
+labelBalance.addEventListener("click", function () {
+  Array.from(document.querySelectorAll(".movements__value"), function (val, i) {
+    return (val.innerText = val.textContent.replace("₽", "RUB"));
+  });
+});
+
+// const arr = [1, 2, 3, 4, -5, -10];
+
+// const someResult = arr.every((val) => val < 0);
+
+// console.log(someResult);
+
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0) {
+    currentAccount.movements.push(amount);
+    updateUi(currentAccount);
+  }
+  inputLoanAmount.value = "";
+});
+
+const arr = [
+  [1, [2, 3]],
+  [4, [5, 6], 7],
+];
+
+// console.log(arr.flat(2));
+
+// const overalBalance1 = accounts
+//   .map((acc) => acc.movements)
+//   .flat()
+//   .reduce((acc, mov) => acc + mov, 0);
+
+// console.log(overalBalance1);
+
+// const arr22 = ["e", "b", "a", "c", "d"];
+
+// console.log(arr22.sort());
+
+// console.log(account1.movements.sort((a₽, b) => a - b));
+
+// const arr33 = [1, 2, 3, 4, 5];
+// console.log(arr33.fill("hello", 2, 4));
+
+// const str = "12345";
+
+// console.log([...str]);
+
+// labelBalance.addEventListener("click", function () {
+//   Array.from(document.querySelectorAll(".movements__value"), function () {
+//     return (val.innerText = val.textContent.replace("₽", "RUB"));
+//   });
+// });
