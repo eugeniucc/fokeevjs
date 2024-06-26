@@ -126,7 +126,7 @@ tabContainer.addEventListener("click", function (e) {
 
 const nav = document.querySelector(".nav");
 
-nav.addEventListener("mouseover", function (e) {
+function hover(e, opacity) {
   if (e.target.classList.contains("nav__link")) {
     const link = e.target;
     const siblings = link.closest("nav").querySelectorAll(".nav__link");
@@ -134,24 +134,169 @@ nav.addEventListener("mouseover", function (e) {
 
     siblings.forEach((el) => {
       if (el !== link) {
-        el.style.opacity = 0.5;
+        el.style.opacity = this;
       }
     });
-    logo.style.opacity = 0.5;
+    logo.style.opacity = this;
+  }
+}
+
+nav.addEventListener("mouseover", hover.bind(0.5));
+
+nav.addEventListener("mouseout", hover.bind(1));
+
+// ПОЯВЛЕНИЕ МЕНЮ ПОСЛЕ ПРОКРУТКИ
+
+// const coord = section1.getBoundingClientRect();
+// const navContainer = document.querySelector(".nav");
+
+// window.addEventListener("scroll", function () {
+//   if (this.window.scrollY > coord.top) {
+//     navContainer.classList.add("sticky");
+//   } else {
+//     navContainer.classList.remove("sticky");
+//   }
+// });
+
+const coord = section1.getBoundingClientRect();
+const navContainer = document.querySelector(".nav");
+
+function callBack(entries) {
+  if (!entries[0].isIntersecting) {
+    navContainer.classList.add("sticky");
+  } else {
+    navContainer.classList.remove("sticky");
+  }
+}
+
+const options = {
+  root: null,
+  treshhold: 0,
+};
+
+const observer = new IntersectionObserver(callBack, options);
+observer.observe(section1);
+
+// ВСПЛЫТИЕ СЕКЦИЙ
+
+// const allSections = document.querySelectorAll(".section");
+
+// function revealSection(entries, observe) {
+//   if (entries[0].isIntersecting) {
+//     entries[0].target.classList.remove("section--hidden");
+//     observe.unobserve(entries[0].target);
+//   }
+// }
+
+// const sectionsObserver = new IntersectionObserver(revealSection, {
+//   treshhold: 0.15,
+// });
+
+// allSections.forEach(function (section) {
+//   sectionsObserver.observe(section);
+//   section.classList.add("section--hidden");
+// });
+
+// ЛЕНИВАЯ ЗАГРУЗКА ИЗОБРАЖЕНИЯ
+
+const images = document.querySelectorAll("img[data-src]");
+
+function loadImg(entries, observer) {
+  if (!entries[0].isIntersecting) {
+    return;
+  }
+
+  entries[0].target.src = entries[0].target.dataset.src;
+
+  entries[0].target.addEventListener("load", function () {
+    entries[0].target.classList.remove("lazy-img");
+  });
+
+  observer.unobserve(entries[0].target);
+}
+
+const imgObserver = new IntersectionObserver(loadImg, { treshhold: 0.15 });
+
+images.forEach((img) => {
+  imgObserver.observe(img);
+});
+
+// СЛАЙДЕР
+
+const slider = document.querySelector(".slider");
+const slides = document.querySelectorAll(".slide");
+const btnRight = document.querySelector(".slider__btn--right");
+const btnLeft = document.querySelector(".slider__btn--left");
+const dotsContainer = document.querySelector(".dots");
+
+let currentSlide = 0;
+const maxSlides = slides.length;
+
+function createDots() {
+  slides.forEach(function (_, i) {
+    dotsContainer.insertAdjacentHTML(
+      "beforeend",
+      `
+      <button class="dots__dot" data-slide="${i}"></button>
+      `
+    );
+  });
+}
+
+dotsContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains("dots__dot")) {
+    const slide = e.target.dataset.slide;
+    goToSlide(slide - 1);
   }
 });
 
-nav.addEventListener("mouseout", function (e) {
-  if (e.target.classList.contains("nav__link")) {
-    const link = e.target;
-    const siblings = link.closest("nav").querySelectorAll(".nav__link");
-    const logo = link.closest("nav").querySelector(".nav__logo");
+function goToSlide(slide) {
+  slides.forEach((s, i) => {
+    s.style.transform = `translateX(${100 * (i - slide)}%)`;
+  });
+}
 
-    siblings.forEach((el) => {
-      if (el !== link) {
-        el.style.opacity = 1;
-      }
-    });
-    logo.style.opacity = 1;
+function activateDots(slide) {
+  document.querySelectorAll(".dots__dot").forEach(function (dot) {
+    dot.classList.remove("dots__dot--active");
+  });
+  document
+    .querySelector(`.dots__dot(data-slide${slide})`)
+    .classList.add("dots__dot--active");
+}
+
+goToSlide(0);
+
+function nextSlide() {
+  if (currentSlide === maxSlides - 1) {
+    currentSlide = 0;
+  } else {
+    currentSlide++;
   }
+  goToSlide(currentSlide);
+}
+
+function prevSlide() {
+  if (currentSlide === 0) {
+    currentSlide = maxSlides - 1;
+  } else {
+    currentSlide--;
+  }
+  goToSlide(currentSlide);
+}
+
+btnRight.addEventListener("click", nextSlide);
+btnLeft.addEventListener("click", prevSlide);
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "ArrowLeft") {
+    prevSlide();
+  }
+  if (e.key === "ArrowRight") {
+    nextSlide();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("страница загрузалась");
 });
