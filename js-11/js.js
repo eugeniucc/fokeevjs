@@ -126,26 +126,74 @@
 
 // console.log(person);
 
-class Person {
-  constructor(firstName, lastName) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-  }
-  // getter для получения полного имени
-  get fullName() {
-    return `${this.firstName}, ${this.lastName}`;
-  }
-  // setter для установки имени
-  set fullName(name) {
-    const parts = name.split(" ");
-    this.firstName = parts[0];
-    this.lastName = parts[1];
-  }
-}
+// class Person {
+//   constructor(firstName, lastName) {
+//     this.firstName = firstName;
+//     this.lastName = lastName;
+//   }
+//   // getter для получения полного имени
+//   get fullName() {
+//     return `${this.firstName}, ${this.lastName}`;
+//   }
+//   // setter для установки имени
+//   set fullName(name) {
+//     const parts = name.split(" ");
+//     this.firstName = parts[0];
+//     this.lastName = parts[1];
+//   }
+// }
 
-const person = new Person("john", "doe");
-console.log(person.fullName);
+// const person = new Person("john", "doe");
+// console.log(person.fullName);
 
-person.fullName = "Jane Smith";
-console.log(person.firstName);
-console.log(person.lastName);
+// person.fullName = "Jane Smith";
+// console.log(person.firstName);
+// console.log(person.lastName);
+
+// "use strict";
+
+// // console.log(Array.from(document.querySelectorAll("h1")));
+
+// class Article {
+//   constructor(title, date) {
+//     this.title = title;
+//     this.date = date;
+//   }
+//   static createTodays() {
+//     return new this("Some article", new Date());
+//   }
+// }
+
+// console.log(Article.createTodays());
+
+// "use strict";
+
+// class User {
+//   constructor(firstName, lastName, age) {
+//     this.firstName = firstName;
+//     this.lastName = lastName;
+//     this.age = age;
+//   }
+//   calcBirth() {
+//     return new Date().getFullYear() - this.age;
+//   }
+// }
+
+// const anna = new User("Anna", "Filimonova", 30);
+// console.log(anna.calcBirth());
+
+// const newProto = {
+//   calcBirth() {
+//     console.log(2037 - this.age);
+//   },
+//   init(firstName, age) {
+//     this.firstName = firstName;
+//     this.age = age;
+//   },
+// };
+
+// const ivan = Object.create(newProto);
+// ivan.init("Ivan", 35);
+// ivan.age = 35;
+// console.log(ivan);
+// ivan.calcBirth();
