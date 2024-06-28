@@ -197,3 +197,57 @@
 // ivan.age = 35;
 // console.log(ivan);
 // ivan.calcBirth();
+
+// "use strict";
+
+// function Employee(firstName, lastName, age, post) {
+//   this.firstName = firstName;
+//   this.lastName = lastName;
+//   this.age = age;
+//   this.post = post;
+// }
+
+// Employee.prototype.calcBirth = function () {
+//   console.log(new Date().getFullYear() - this.age);
+// };
+
+// const cashier = new Employee("Ivan", "Avdeev", 26, "Cashier");
+
+// function Manager(firstName, lastName, age, post) {
+//   Employee.call(this, firstName, lastName, age, post);
+//   this.password = this.password;
+// }
+
+// Manager.prototype = Object.create(Employee.prototype);
+
+// Manager.prototype.sayHello = function () {
+//   console.log("Привет я метод менеджера!");
+// };
+
+// const manager = new Manager("Irina", "Cravt", 33, "Manager", "Password");
+
+// "use strict";
+
+// class Employee {
+//   constructor(firstName, lastName, age, post) {
+//     this.firstName = firstName;
+//     this.lastName = lastName;
+//     this.age = age;
+//     this.post = post;
+//   }
+//   calcBirth() {
+//     console.log(new Date().getFullYear() - this.age);
+//   }
+// }
+
+// class Manager extends Employee {
+//   constructor(firstName, lastName, age, post, password) {
+//     super(firstName, lastName, age, post);
+//     this.password = password;
+//   }
+// }
+
+// const manager = new Manager("Irina", "Cravt", 33, "Manager", "Password");
+// console.log(manager);
+
+
