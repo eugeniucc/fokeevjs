@@ -250,4 +250,134 @@
 // const manager = new Manager("Irina", "Cravt", 33, "Manager", "Password");
 // console.log(manager);
 
+// const users = [
+//   { id: 1, name: "Alice" },
+//   { id: 2, name: "Bob" },
+//   { id: 3, name: "Charlie" },
+//   { id: 4, name: "David" },
+// ];
 
+// function findUserById(users, idNumber) {
+//   const result = users.find((e) => e.id === idNumber);
+//   if (result) {
+//     return console.log(result);
+//   } else {
+//     return console.log("Такого пользователя не существует");
+//   }
+// }
+
+// findUserById(users, 2);
+
+// function Person(name, age) {
+//   this.name = name;
+//   this.age = age;
+// }
+
+// функция конструктор
+// const alice = new Person("Alice", 30);
+// console.log(alice);
+
+// prototype
+// Person.prototype.greet = function () {
+//   console.log(`Hello my name is ${this.name}`);
+// };
+
+// const bob = new Person("Bob", 30);
+// bob.greet();
+// // __proto__
+
+// console.log(bob.__proto__ === Person.prototype);
+
+// сеттеры set
+
+// const obj = {
+//   _name: "",
+//   set name(value) {
+//     this._name = value.trim().toUpperCase();
+//   },
+//   get name() {
+//     return this._name;
+//   },
+// };
+
+// obj.name = " Alice ";
+// console.log(obj.name); // ALICE
+
+// статические методы
+
+// class Person {
+//   constructor(name, age) {
+//     this.name = name;
+//     this.age = age;
+//   }
+//   static create(name, age) {
+//     return new Person(name, age);
+//   }
+// }
+
+// const charlie = new Person("Charlie", 35);
+
+// console.log(charlie);
+
+// Object create метод который создает новый обьект с указанным прототипом
+
+// const personProto = {
+//   greet() {
+//     console.log(`Hello my names is ${this.name}`);
+//   },
+// };
+
+// const alice = Object.create(personProto);
+// alice.name = "Alice";
+// console.log(alice);
+
+// "use strict";
+
+// class Account {
+//   movements = [];
+//   constructor(owner, currency, pin) {
+//     this.owner = owner;
+//     this.currency = currency;
+//     this.pin = pin;
+//     console.log("Вы создали аккаунт Иван");
+//   }
+//   sayHi() {
+//     console.log("Hello World");
+//   }
+// }
+
+// const ivan = new Account("Ivan", "Rub", 1111);
+// console.log(ivan);
+
+"use strict";
+
+class Account {
+  #movements = [];
+  #pin;
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+  }
+  sayHi() {
+    console.log("Вы создали аккаунт Иван");
+  }
+  changePin(password) {
+    this.#pin = password;
+    return this;
+  }
+  deposit(val) {
+    this.#movements.push(val);
+    return this;
+  }
+  withdraw(val) {
+    this.deposit(-val);
+    return this;
+  }
+  getMov() {
+    console.log(this.#movements);
+  }
+}
+
+const Ivan = new Account("Ivan", "Rub", 1111);
+Ivan.deposit(300).deposit(200).withdraw(100).getMov();
